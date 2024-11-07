@@ -9,8 +9,9 @@ import time
 app = Flask(__name__)
 
 # Configure the Firefox options
-options = Options()
+options = webdriver.firefox.options.Options()
 options.add_argument('-headless')  # Run headless
+options.set_capability('marionette', True)
 
 @app.route('/test', methods=['GET'])
 def test():
@@ -22,8 +23,7 @@ def run_selenium():
     os.environ['PATH'] += ':' + os.path.dirname(os.path.realpath(__file__)) + "/web_driver"
     
     # Initialize WebDriver
-    service = Service("/app/web_driver/geckodriver")  # Explicitly specify the path if needed
-    driver = webdriver.Firefox(service=service, options=options)
+    driver = webdriver.Firefox(options = options) 
     
     try:
         # Set a maximum page load time of 2 minutes
@@ -34,7 +34,7 @@ def run_selenium():
         driver.get(url)
         
         # Give the page time to load
-        time.sleep(5)
+        time.sleep(10)
         
         # Extract comments (customize the XPath as needed)
         comments_elements = driver.find_elements(By.XPATH, "//div[@data-test-id='commentThread-comment']//span[@class='text-container']")
