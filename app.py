@@ -9,14 +9,23 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 app = Flask(__name__)
 
+@app.route('/test', methods=['GET'])
+def test():
+    return jsonify({"message": "Hello, World!"})
+
+
 @app.route('/run-selenium', methods=['GET'])
 def run_selenium():
     options = Options()
     options.headless = True  # Run headless (no window)
-    options.add_argument("--no-sandbox")  # Required for App Engine
-    options.add_argument("--disable-dev-shm-usage")  # Use /tmp instead of /dev/shm
-    options.add_argument("--disable-gpu")  # Disable GPU hardware acceleration
-    options.add_argument("--remote-debugging-port=9222")  # Enable remote debugging
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--remote-debugging-port=9222")
+    options.add_argument("--disable-software-rasterizer")  # Added to disable GPU rasterization
+    options.add_argument("--disable-extensions")  # Disable unnecessary extensions
+    options.add_argument("--disable-background-networking")  # Reduces network usage
+    options.add_argument("--disable-sync") 
 
 
     # Automatically install and use the appropriate ChromeDriver
@@ -30,7 +39,7 @@ def run_selenium():
     driver.get(url)
 
     # Give the page time to load and initialize comments section
-    time.sleep(5)
+    time.sleep(15)
 
     # Extract comments
     comments_elements = driver.find_elements(By.XPATH, "//div[@data-test-id='commentThread-comment']//span[@class='text-container']")
