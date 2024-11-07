@@ -11,7 +11,6 @@ app = Flask(__name__)
 # Configure the Firefox options
 options = webdriver.firefox.options.Options()
 options.add_argument('-headless')  # Run headless
-options.set_capability('marionette', True)
 
 @app.route('/test', methods=['GET'])
 def test():
