@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
 COPY . /app
 WORKDIR /app
 
+RUN chmod +x /app/web_driver/geckodriver
+
 # Set environment variable to include Geckodriver path
 ENV PATH="/app/web_driver:${PATH}"
 
